@@ -1,0 +1,1222 @@
+GAS LISTING /tmp/ccPGEp66.s 			page 1
+
+
+   1              		.file	"syscall_c.cpp"
+   2              		.option pic
+   3              		.option norelax
+   4              		.text
+   5              	.Ltext0:
+   6              		.align	2
+   7              		.globl	_Z9mem_allocm
+   9              	_Z9mem_allocm:
+  10              	.LFB39:
+  11              		.file 1 "src/syscall_c.cpp"
+   1:src/syscall_c.cpp **** #include "../h/syscall_c.h"
+   2:src/syscall_c.cpp **** 
+   3:src/syscall_c.cpp **** #include "../h/print.hpp"
+   4:src/syscall_c.cpp **** #include "../h/riscv.hpp"
+   5:src/syscall_c.cpp **** 
+   6:src/syscall_c.cpp **** void* mem_alloc (size_t size) {
+  12              		.loc 1 6 31
+  13              		.cfi_startproc
+  14              	.LVL0:
+  15 0000 130101FF 		addi	sp,sp,-16
+  16              		.cfi_def_cfa_offset 16
+  17 0004 23348100 		sd	s0,8(sp)
+  18              		.cfi_offset 8, -8
+  19 0008 13040101 		addi	s0,sp,16
+  20              		.cfi_def_cfa 8, 0
+   7:src/syscall_c.cpp ****     uint64 sizeInBlocks = (size + MEM_BLOCK_SIZE - 1) / MEM_BLOCK_SIZE;
+  21              		.loc 1 7 5
+  22              		.loc 1 7 50 is_stmt 0
+  23 000c 9305F503 		addi	a1,a0,63
+  24              	.LVL1:
+   8:src/syscall_c.cpp **** 
+   9:src/syscall_c.cpp ****     register uint64 x0 asm("a0") = 0x01;
+  25              		.loc 1 9 5 is_stmt 1
+  26              		.loc 1 9 21 is_stmt 0
+  27 0010 13051000 		li	a0,1
+  28              	.LVL2:
+  10:src/syscall_c.cpp ****     register uint64 x1 asm("a1") = sizeInBlocks;
+  29              		.loc 1 10 5 is_stmt 1
+  30              		.loc 1 10 21 is_stmt 0
+  31 0014 93D56500 		srli	a1,a1,6
+  32              	.LVL3:
+  11:src/syscall_c.cpp **** 
+  12:src/syscall_c.cpp ****     __asm__ volatile ("ecall"
+  33              		.loc 1 12 5 is_stmt 1
+  13:src/syscall_c.cpp ****         : "+r"(x0)
+  14:src/syscall_c.cpp ****         : "r"(x1)
+  15:src/syscall_c.cpp ****         : "memory");
+  34              		.loc 1 15 20 is_stmt 0
+  35              	#APP
+  36              	# 15 "src/syscall_c.cpp" 1
+  16              	
+  17:src/syscall_c.cpp ****     return (void*)x0;
+  37              		ecall
+  38              	# 0 "" 2
+  39              		.loc 1 17 5 is_stmt 1
+  18:src/syscall_c.cpp **** }
+  40              		.loc 1 18 1 is_stmt 0
+GAS LISTING /tmp/ccPGEp66.s 			page 2
+
+
+  41              	#NO_APP
+  42 001c 03348100 		ld	s0,8(sp)
+  43              		.cfi_restore 8
+  44              		.cfi_def_cfa 2, 16
+  45 0020 13010101 		addi	sp,sp,16
+  46              		.cfi_def_cfa_offset 0
+  47 0024 67800000 		jr	ra
+  48              		.cfi_endproc
+  49              	.LFE39:
+  51              		.align	2
+  52              		.globl	_Z8mem_freePv
+  54              	_Z8mem_freePv:
+  55              	.LFB40:
+  19:src/syscall_c.cpp **** 
+  20:src/syscall_c.cpp **** int mem_free (void* address) {
+  56              		.loc 1 20 30 is_stmt 1
+  57              		.cfi_startproc
+  58              	.LVL4:
+  59 0028 130101FF 		addi	sp,sp,-16
+  60              		.cfi_def_cfa_offset 16
+  61 002c 23348100 		sd	s0,8(sp)
+  62              		.cfi_offset 8, -8
+  63 0030 13040101 		addi	s0,sp,16
+  64              		.cfi_def_cfa 8, 0
+  65 0034 93050500 		mv	a1,a0
+  21:src/syscall_c.cpp ****     register uint64 x0 asm("a0") = 0x02;
+  66              		.loc 1 21 5
+  67              		.loc 1 21 21 is_stmt 0
+  68 0038 13052000 		li	a0,2
+  69              	.LVL5:
+  22:src/syscall_c.cpp ****     register uint64 x1 asm("a1") = (uint64)address;
+  70              		.loc 1 22 5 is_stmt 1
+  23:src/syscall_c.cpp **** 
+  24:src/syscall_c.cpp ****     __asm__ volatile ("ecall"
+  71              		.loc 1 24 5
+  25:src/syscall_c.cpp ****         : "+r"(x0)
+  26:src/syscall_c.cpp ****         : "r"(x1)
+  27:src/syscall_c.cpp ****         : "memory");
+  72              		.loc 1 27 20 is_stmt 0
+  73              	#APP
+  74              	# 27 "src/syscall_c.cpp" 1
+  28              	
+  29:src/syscall_c.cpp ****     return (int)x0;
+  75              		ecall
+  76              	# 0 "" 2
+  77              		.loc 1 29 5 is_stmt 1
+  30:src/syscall_c.cpp **** }
+  78              		.loc 1 30 1 is_stmt 0
+  79              	#NO_APP
+  80 0040 1B050500 		sext.w	a0,a0
+  81 0044 03348100 		ld	s0,8(sp)
+  82              		.cfi_restore 8
+  83              		.cfi_def_cfa 2, 16
+  84 0048 13010101 		addi	sp,sp,16
+  85              		.cfi_def_cfa_offset 0
+  86 004c 67800000 		jr	ra
+  87              		.cfi_endproc
+GAS LISTING /tmp/ccPGEp66.s 			page 3
+
+
+  88              	.LFE40:
+  90              		.align	2
+  91              		.globl	_Z13thread_createPP3TCBPFvPvES2_
+  93              	_Z13thread_createPP3TCBPFvPvES2_:
+  94              	.LFB41:
+  31:src/syscall_c.cpp **** 
+  32:src/syscall_c.cpp **** int thread_create(
+  33:src/syscall_c.cpp ****     thread_t* handle,
+  34:src/syscall_c.cpp ****     void(*start_routine)(void*),
+  35:src/syscall_c.cpp ****     void* arg
+  36:src/syscall_c.cpp **** ) {
+  95              		.loc 1 36 3 is_stmt 1
+  96              		.cfi_startproc
+  97              	.LVL6:
+  98 0050 130101FF 		addi	sp,sp,-16
+  99              		.cfi_def_cfa_offset 16
+ 100 0054 23348100 		sd	s0,8(sp)
+ 101              		.cfi_offset 8, -8
+ 102 0058 13040101 		addi	s0,sp,16
+ 103              		.cfi_def_cfa 8, 0
+ 104 005c 13070500 		mv	a4,a0
+ 105 0060 93870500 		mv	a5,a1
+ 106 0064 93060600 		mv	a3,a2
+  37:src/syscall_c.cpp ****     register uint64 x0 asm("a0") = 0x11;
+ 107              		.loc 1 37 5
+ 108              		.loc 1 37 21 is_stmt 0
+ 109 0068 13051001 		li	a0,17
+ 110              	.LVL7:
+  38:src/syscall_c.cpp ****     register uint64 x1 asm("a1") = (uint64)handle;
+ 111              		.loc 1 38 5 is_stmt 1
+ 112              		.loc 1 38 21 is_stmt 0
+ 113 006c 93050700 		mv	a1,a4
+ 114              	.LVL8:
+  39:src/syscall_c.cpp ****     register uint64 x2 asm("a2") = (uint64)start_routine;
+ 115              		.loc 1 39 5 is_stmt 1
+ 116              		.loc 1 39 21 is_stmt 0
+ 117 0070 13860700 		mv	a2,a5
+ 118              	.LVL9:
+  40:src/syscall_c.cpp ****     register uint64 x3 asm("a3") = (uint64)arg;
+ 119              		.loc 1 40 5 is_stmt 1
+  41:src/syscall_c.cpp **** 
+  42:src/syscall_c.cpp ****     __asm__ volatile ("ecall"
+ 120              		.loc 1 42 5
+  43:src/syscall_c.cpp ****         : "+r"(x0)
+  44:src/syscall_c.cpp ****         : "r"(x1), "r"(x2), "r"(x3)
+  45:src/syscall_c.cpp ****         : "memory");
+ 121              		.loc 1 45 20 is_stmt 0
+ 122              	#APP
+ 123              	# 45 "src/syscall_c.cpp" 1
+  46              	
+  47:src/syscall_c.cpp ****     return (int)x0;
+ 124              		ecall
+ 125              	# 0 "" 2
+ 126              		.loc 1 47 5 is_stmt 1
+  48:src/syscall_c.cpp **** }
+ 127              		.loc 1 48 1 is_stmt 0
+ 128              	#NO_APP
+GAS LISTING /tmp/ccPGEp66.s 			page 4
+
+
+ 129 0078 1B050500 		sext.w	a0,a0
+ 130 007c 03348100 		ld	s0,8(sp)
+ 131              		.cfi_restore 8
+ 132              		.cfi_def_cfa 2, 16
+ 133 0080 13010101 		addi	sp,sp,16
+ 134              		.cfi_def_cfa_offset 0
+ 135 0084 67800000 		jr	ra
+ 136              		.cfi_endproc
+ 137              	.LFE41:
+ 139              		.align	2
+ 140              		.globl	_Z11thread_exitv
+ 142              	_Z11thread_exitv:
+ 143              	.LFB42:
+  49:src/syscall_c.cpp **** 
+  50:src/syscall_c.cpp **** int thread_exit () {
+ 144              		.loc 1 50 20 is_stmt 1
+ 145              		.cfi_startproc
+ 146 0088 130101FF 		addi	sp,sp,-16
+ 147              		.cfi_def_cfa_offset 16
+ 148 008c 23348100 		sd	s0,8(sp)
+ 149              		.cfi_offset 8, -8
+ 150 0090 13040101 		addi	s0,sp,16
+ 151              		.cfi_def_cfa 8, 0
+  51:src/syscall_c.cpp ****     register uint64 x0 asm("a0") = 0x12;
+ 152              		.loc 1 51 5
+ 153              		.loc 1 51 21 is_stmt 0
+ 154 0094 13052001 		li	a0,18
+  52:src/syscall_c.cpp **** 
+  53:src/syscall_c.cpp ****     __asm__ volatile ("ecall"
+ 155              		.loc 1 53 5 is_stmt 1
+  54:src/syscall_c.cpp ****         : "+r"(x0)
+  55:src/syscall_c.cpp ****         :
+  56:src/syscall_c.cpp ****         : "memory");
+ 156              		.loc 1 56 20 is_stmt 0
+ 157              	#APP
+ 158              	# 56 "src/syscall_c.cpp" 1
+  57              	
+  58:src/syscall_c.cpp ****     return (int)x0;
+ 159              		ecall
+ 160              	# 0 "" 2
+ 161              		.loc 1 58 5 is_stmt 1
+  59:src/syscall_c.cpp **** }
+ 162              		.loc 1 59 1 is_stmt 0
+ 163              	#NO_APP
+ 164 009c 1B050500 		sext.w	a0,a0
+ 165 00a0 03348100 		ld	s0,8(sp)
+ 166              		.cfi_restore 8
+ 167              		.cfi_def_cfa 2, 16
+ 168 00a4 13010101 		addi	sp,sp,16
+ 169              		.cfi_def_cfa_offset 0
+ 170 00a8 67800000 		jr	ra
+ 171              		.cfi_endproc
+ 172              	.LFE42:
+ 174              		.align	2
+ 175              		.globl	_Z15thread_dispatchv
+ 177              	_Z15thread_dispatchv:
+ 178              	.LFB43:
+GAS LISTING /tmp/ccPGEp66.s 			page 5
+
+
+  60:src/syscall_c.cpp **** 
+  61:src/syscall_c.cpp **** void thread_dispatch () {
+ 179              		.loc 1 61 25 is_stmt 1
+ 180              		.cfi_startproc
+ 181 00ac 130101FF 		addi	sp,sp,-16
+ 182              		.cfi_def_cfa_offset 16
+ 183 00b0 23348100 		sd	s0,8(sp)
+ 184              		.cfi_offset 8, -8
+ 185 00b4 13040101 		addi	s0,sp,16
+ 186              		.cfi_def_cfa 8, 0
+  62:src/syscall_c.cpp ****     register uint64 x0 asm("a0") = 0x13;
+ 187              		.loc 1 62 5
+ 188              		.loc 1 62 21 is_stmt 0
+ 189 00b8 13053001 		li	a0,19
+  63:src/syscall_c.cpp **** 
+  64:src/syscall_c.cpp ****     __asm__ volatile ("ecall"
+ 190              		.loc 1 64 5 is_stmt 1
+  65:src/syscall_c.cpp ****         : "+r"(x0)
+  66:src/syscall_c.cpp ****         :
+  67:src/syscall_c.cpp ****         : "memory");
+ 191              		.loc 1 67 20 is_stmt 0
+ 192              	#APP
+ 193              	# 67 "src/syscall_c.cpp" 1
+  68              	}
+ 194              		ecall
+ 195              	# 0 "" 2
+ 196              		.loc 1 68 1
+ 197              	#NO_APP
+ 198 00c0 03348100 		ld	s0,8(sp)
+ 199              		.cfi_restore 8
+ 200              		.cfi_def_cfa 2, 16
+ 201 00c4 13010101 		addi	sp,sp,16
+ 202              		.cfi_def_cfa_offset 0
+ 203 00c8 67800000 		jr	ra
+ 204              		.cfi_endproc
+ 205              	.LFE43:
+ 207              		.align	2
+ 208              		.globl	_Z8sem_openPP9KernelSemm
+ 210              	_Z8sem_openPP9KernelSemm:
+ 211              	.LFB44:
+  69:src/syscall_c.cpp **** 
+  70:src/syscall_c.cpp **** int sem_open (
+  71:src/syscall_c.cpp ****     sem_t* handle,
+  72:src/syscall_c.cpp ****     uint64 init
+  73:src/syscall_c.cpp **** ) {
+ 212              		.loc 1 73 3 is_stmt 1
+ 213              		.cfi_startproc
+ 214              	.LVL10:
+ 215 00cc 130101FF 		addi	sp,sp,-16
+ 216              		.cfi_def_cfa_offset 16
+ 217 00d0 23348100 		sd	s0,8(sp)
+ 218              		.cfi_offset 8, -8
+ 219 00d4 13040101 		addi	s0,sp,16
+ 220              		.cfi_def_cfa 8, 0
+ 221 00d8 93070500 		mv	a5,a0
+ 222 00dc 13860500 		mv	a2,a1
+  74:src/syscall_c.cpp ****     register uint64 x0 asm("a0") = 0x21;
+GAS LISTING /tmp/ccPGEp66.s 			page 6
+
+
+ 223              		.loc 1 74 5
+ 224              		.loc 1 74 21 is_stmt 0
+ 225 00e0 13051002 		li	a0,33
+ 226              	.LVL11:
+  75:src/syscall_c.cpp ****     register uint64 x1 asm("a1") = (uint64)handle;
+ 227              		.loc 1 75 5 is_stmt 1
+ 228              		.loc 1 75 21 is_stmt 0
+ 229 00e4 93850700 		mv	a1,a5
+ 230              	.LVL12:
+  76:src/syscall_c.cpp ****     register uint64 x2 asm("a2") = init;
+ 231              		.loc 1 76 5 is_stmt 1
+  77:src/syscall_c.cpp **** 
+  78:src/syscall_c.cpp ****     __asm__ volatile ("ecall"
+ 232              		.loc 1 78 5
+  79:src/syscall_c.cpp ****         : "+r"(x0)
+  80:src/syscall_c.cpp ****         : "r"(x1), "r"(x2)
+  81:src/syscall_c.cpp ****         : "memory");
+ 233              		.loc 1 81 20 is_stmt 0
+ 234              	#APP
+ 235              	# 81 "src/syscall_c.cpp" 1
+  82              	
+  83:src/syscall_c.cpp ****     return (int)x0;
+ 236              		ecall
+ 237              	# 0 "" 2
+ 238              		.loc 1 83 5 is_stmt 1
+  84:src/syscall_c.cpp **** }
+ 239              		.loc 1 84 1 is_stmt 0
+ 240              	#NO_APP
+ 241 00ec 1B050500 		sext.w	a0,a0
+ 242 00f0 03348100 		ld	s0,8(sp)
+ 243              		.cfi_restore 8
+ 244              		.cfi_def_cfa 2, 16
+ 245 00f4 13010101 		addi	sp,sp,16
+ 246              		.cfi_def_cfa_offset 0
+ 247 00f8 67800000 		jr	ra
+ 248              		.cfi_endproc
+ 249              	.LFE44:
+ 251              		.align	2
+ 252              		.globl	_Z9sem_closeP9KernelSem
+ 254              	_Z9sem_closeP9KernelSem:
+ 255              	.LFB45:
+  85:src/syscall_c.cpp **** 
+  86:src/syscall_c.cpp **** int sem_close (sem_t handle) {
+ 256              		.loc 1 86 30 is_stmt 1
+ 257              		.cfi_startproc
+ 258              	.LVL13:
+ 259 00fc 130101FF 		addi	sp,sp,-16
+ 260              		.cfi_def_cfa_offset 16
+ 261 0100 23348100 		sd	s0,8(sp)
+ 262              		.cfi_offset 8, -8
+ 263 0104 13040101 		addi	s0,sp,16
+ 264              		.cfi_def_cfa 8, 0
+ 265 0108 93050500 		mv	a1,a0
+  87:src/syscall_c.cpp ****     register uint64 x0 asm("a0") = 0x22;
+ 266              		.loc 1 87 5
+ 267              		.loc 1 87 21 is_stmt 0
+ 268 010c 13052002 		li	a0,34
+GAS LISTING /tmp/ccPGEp66.s 			page 7
+
+
+ 269              	.LVL14:
+  88:src/syscall_c.cpp ****     register uint64 x1 asm("a1") = (uint64)handle;
+ 270              		.loc 1 88 5 is_stmt 1
+  89:src/syscall_c.cpp **** 
+  90:src/syscall_c.cpp ****     __asm__ volatile ("ecall"
+ 271              		.loc 1 90 5
+  91:src/syscall_c.cpp ****         : "+r"(x0)
+  92:src/syscall_c.cpp ****         : "r"(x1)
+  93:src/syscall_c.cpp ****         : "memory");
+ 272              		.loc 1 93 20 is_stmt 0
+ 273              	#APP
+ 274              	# 93 "src/syscall_c.cpp" 1
+  94              	
+  95:src/syscall_c.cpp ****     return (int)x0;
+ 275              		ecall
+ 276              	# 0 "" 2
+ 277              		.loc 1 95 5 is_stmt 1
+  96:src/syscall_c.cpp **** }
+ 278              		.loc 1 96 1 is_stmt 0
+ 279              	#NO_APP
+ 280 0114 1B050500 		sext.w	a0,a0
+ 281 0118 03348100 		ld	s0,8(sp)
+ 282              		.cfi_restore 8
+ 283              		.cfi_def_cfa 2, 16
+ 284 011c 13010101 		addi	sp,sp,16
+ 285              		.cfi_def_cfa_offset 0
+ 286 0120 67800000 		jr	ra
+ 287              		.cfi_endproc
+ 288              	.LFE45:
+ 290              		.align	2
+ 291              		.globl	_Z8sem_waitP9KernelSem
+ 293              	_Z8sem_waitP9KernelSem:
+ 294              	.LFB46:
+  97:src/syscall_c.cpp **** 
+  98:src/syscall_c.cpp **** int sem_wait (sem_t id) {
+ 295              		.loc 1 98 25 is_stmt 1
+ 296              		.cfi_startproc
+ 297              	.LVL15:
+ 298 0124 130101FF 		addi	sp,sp,-16
+ 299              		.cfi_def_cfa_offset 16
+ 300 0128 23348100 		sd	s0,8(sp)
+ 301              		.cfi_offset 8, -8
+ 302 012c 13040101 		addi	s0,sp,16
+ 303              		.cfi_def_cfa 8, 0
+ 304 0130 93050500 		mv	a1,a0
+  99:src/syscall_c.cpp ****     register uint64 x0 asm("a0") = 0x23;
+ 305              		.loc 1 99 5
+ 306              		.loc 1 99 21 is_stmt 0
+ 307 0134 13053002 		li	a0,35
+ 308              	.LVL16:
+ 100:src/syscall_c.cpp ****     register uint64 x1 asm("a1") = (uint64)id;
+ 309              		.loc 1 100 5 is_stmt 1
+ 101:src/syscall_c.cpp **** 
+ 102:src/syscall_c.cpp ****     __asm__ volatile ("ecall"
+ 310              		.loc 1 102 5
+ 103:src/syscall_c.cpp ****         : "+r"(x0)
+ 104:src/syscall_c.cpp ****         : "r"(x1)
+GAS LISTING /tmp/ccPGEp66.s 			page 8
+
+
+ 105:src/syscall_c.cpp ****         : "memory");
+ 311              		.loc 1 105 20 is_stmt 0
+ 312              	#APP
+ 313              	# 105 "src/syscall_c.cpp" 1
+ 106              	
+ 107:src/syscall_c.cpp ****     return (int)x0;
+ 314              		ecall
+ 315              	# 0 "" 2
+ 316              		.loc 1 107 5 is_stmt 1
+ 108:src/syscall_c.cpp **** }
+ 317              		.loc 1 108 1 is_stmt 0
+ 318              	#NO_APP
+ 319 013c 1B050500 		sext.w	a0,a0
+ 320 0140 03348100 		ld	s0,8(sp)
+ 321              		.cfi_restore 8
+ 322              		.cfi_def_cfa 2, 16
+ 323 0144 13010101 		addi	sp,sp,16
+ 324              		.cfi_def_cfa_offset 0
+ 325 0148 67800000 		jr	ra
+ 326              		.cfi_endproc
+ 327              	.LFE46:
+ 329              		.align	2
+ 330              		.globl	_Z10sem_signalP9KernelSem
+ 332              	_Z10sem_signalP9KernelSem:
+ 333              	.LFB47:
+ 109:src/syscall_c.cpp **** 
+ 110:src/syscall_c.cpp **** int sem_signal (sem_t id) {
+ 334              		.loc 1 110 27 is_stmt 1
+ 335              		.cfi_startproc
+ 336              	.LVL17:
+ 337 014c 130101FF 		addi	sp,sp,-16
+ 338              		.cfi_def_cfa_offset 16
+ 339 0150 23348100 		sd	s0,8(sp)
+ 340              		.cfi_offset 8, -8
+ 341 0154 13040101 		addi	s0,sp,16
+ 342              		.cfi_def_cfa 8, 0
+ 343 0158 93050500 		mv	a1,a0
+ 111:src/syscall_c.cpp ****     register uint64 x0 asm("a0") = 0x24;
+ 344              		.loc 1 111 5
+ 345              		.loc 1 111 21 is_stmt 0
+ 346 015c 13054002 		li	a0,36
+ 347              	.LVL18:
+ 112:src/syscall_c.cpp ****     register uint64 x1 asm("a1") = (uint64)id;
+ 348              		.loc 1 112 5 is_stmt 1
+ 113:src/syscall_c.cpp **** 
+ 114:src/syscall_c.cpp ****     __asm__ volatile ("ecall"
+ 349              		.loc 1 114 5
+ 115:src/syscall_c.cpp ****         : "+r"(x0)
+ 116:src/syscall_c.cpp ****         : "r"(x1)
+ 117:src/syscall_c.cpp ****         : "memory");
+ 350              		.loc 1 117 20 is_stmt 0
+ 351              	#APP
+ 352              	# 117 "src/syscall_c.cpp" 1
+ 118              	
+ 119:src/syscall_c.cpp ****     return (int)x0;
+ 353              		ecall
+ 354              	# 0 "" 2
+GAS LISTING /tmp/ccPGEp66.s 			page 9
+
+
+ 355              		.loc 1 119 5 is_stmt 1
+ 120:src/syscall_c.cpp **** }
+ 356              		.loc 1 120 1 is_stmt 0
+ 357              	#NO_APP
+ 358 0164 1B050500 		sext.w	a0,a0
+ 359 0168 03348100 		ld	s0,8(sp)
+ 360              		.cfi_restore 8
+ 361              		.cfi_def_cfa 2, 16
+ 362 016c 13010101 		addi	sp,sp,16
+ 363              		.cfi_def_cfa_offset 0
+ 364 0170 67800000 		jr	ra
+ 365              		.cfi_endproc
+ 366              	.LFE47:
+ 368              		.align	2
+ 369              		.globl	_Z10sem_wait_nP9KernelSemj
+ 371              	_Z10sem_wait_nP9KernelSemj:
+ 372              	.LFB48:
+ 121:src/syscall_c.cpp **** 
+ 122:src/syscall_c.cpp **** int sem_wait_n(sem_t id, unsigned n) {
+ 373              		.loc 1 122 38 is_stmt 1
+ 374              		.cfi_startproc
+ 375              	.LVL19:
+ 376 0174 130101FF 		addi	sp,sp,-16
+ 377              		.cfi_def_cfa_offset 16
+ 378 0178 23348100 		sd	s0,8(sp)
+ 379              		.cfi_offset 8, -8
+ 380 017c 13040101 		addi	s0,sp,16
+ 381              		.cfi_def_cfa 8, 0
+ 382 0180 93070500 		mv	a5,a0
+ 383 0184 13860500 		mv	a2,a1
+ 123:src/syscall_c.cpp ****     register uint64 x0 asm("a0") = 0x25;
+ 384              		.loc 1 123 5
+ 385              		.loc 1 123 21 is_stmt 0
+ 386 0188 13055002 		li	a0,37
+ 387              	.LVL20:
+ 124:src/syscall_c.cpp ****     register uint64 x1 asm("a1") = (uint64)id;
+ 388              		.loc 1 124 5 is_stmt 1
+ 389              		.loc 1 124 21 is_stmt 0
+ 390 018c 93850700 		mv	a1,a5
+ 391              	.LVL21:
+ 125:src/syscall_c.cpp ****     register uint64 x2 asm("a2") = n;
+ 392              		.loc 1 125 5 is_stmt 1
+ 393              		.loc 1 125 21 is_stmt 0
+ 394 0190 13160602 		slli	a2,a2,32
+ 395 0194 13560602 		srli	a2,a2,32
+ 126:src/syscall_c.cpp **** 
+ 127:src/syscall_c.cpp ****     __asm__ volatile ("ecall"
+ 396              		.loc 1 127 5 is_stmt 1
+ 128:src/syscall_c.cpp ****         : "+r"(x0)
+ 129:src/syscall_c.cpp ****         : "r"(x1), "r"(x2)
+ 130:src/syscall_c.cpp ****         : "memory");
+ 397              		.loc 1 130 20 is_stmt 0
+ 398              	#APP
+ 399              	# 130 "src/syscall_c.cpp" 1
+ 131              	
+ 132:src/syscall_c.cpp ****     return (int)x0;
+ 400              		ecall
+GAS LISTING /tmp/ccPGEp66.s 			page 10
+
+
+ 401              	# 0 "" 2
+ 402              		.loc 1 132 5 is_stmt 1
+ 133:src/syscall_c.cpp **** }
+ 403              		.loc 1 133 1 is_stmt 0
+ 404              	#NO_APP
+ 405 019c 1B050500 		sext.w	a0,a0
+ 406 01a0 03348100 		ld	s0,8(sp)
+ 407              		.cfi_restore 8
+ 408              		.cfi_def_cfa 2, 16
+ 409 01a4 13010101 		addi	sp,sp,16
+ 410              		.cfi_def_cfa_offset 0
+ 411 01a8 67800000 		jr	ra
+ 412              		.cfi_endproc
+ 413              	.LFE48:
+ 415              		.align	2
+ 416              		.globl	_Z12sem_signal_nP9KernelSemj
+ 418              	_Z12sem_signal_nP9KernelSemj:
+ 419              	.LFB49:
+ 134:src/syscall_c.cpp **** 
+ 135:src/syscall_c.cpp **** int sem_signal_n(sem_t id, unsigned n) {
+ 420              		.loc 1 135 40 is_stmt 1
+ 421              		.cfi_startproc
+ 422              	.LVL22:
+ 423 01ac 130101FF 		addi	sp,sp,-16
+ 424              		.cfi_def_cfa_offset 16
+ 425 01b0 23348100 		sd	s0,8(sp)
+ 426              		.cfi_offset 8, -8
+ 427 01b4 13040101 		addi	s0,sp,16
+ 428              		.cfi_def_cfa 8, 0
+ 429 01b8 93070500 		mv	a5,a0
+ 430 01bc 13860500 		mv	a2,a1
+ 136:src/syscall_c.cpp ****     register uint64 x0 asm("a0") = 0x26;
+ 431              		.loc 1 136 5
+ 432              		.loc 1 136 21 is_stmt 0
+ 433 01c0 13056002 		li	a0,38
+ 434              	.LVL23:
+ 137:src/syscall_c.cpp ****     register uint64 x1 asm("a1") = (uint64)id;
+ 435              		.loc 1 137 5 is_stmt 1
+ 436              		.loc 1 137 21 is_stmt 0
+ 437 01c4 93850700 		mv	a1,a5
+ 438              	.LVL24:
+ 138:src/syscall_c.cpp ****     register uint64 x2 asm("a2") = n;
+ 439              		.loc 1 138 5 is_stmt 1
+ 440              		.loc 1 138 21 is_stmt 0
+ 441 01c8 13160602 		slli	a2,a2,32
+ 442 01cc 13560602 		srli	a2,a2,32
+ 139:src/syscall_c.cpp **** 
+ 140:src/syscall_c.cpp ****     __asm__ volatile ("ecall"
+ 443              		.loc 1 140 5 is_stmt 1
+ 141:src/syscall_c.cpp ****         : "+r"(x0)
+ 142:src/syscall_c.cpp ****         : "r"(x1), "r"(x2)
+ 143:src/syscall_c.cpp ****         : "memory");
+ 444              		.loc 1 143 20 is_stmt 0
+ 445              	#APP
+ 446              	# 143 "src/syscall_c.cpp" 1
+ 144              	
+ 145:src/syscall_c.cpp ****     return (int)x0;
+GAS LISTING /tmp/ccPGEp66.s 			page 11
+
+
+ 447              		ecall
+ 448              	# 0 "" 2
+ 449              		.loc 1 145 5 is_stmt 1
+ 146:src/syscall_c.cpp **** }
+ 450              		.loc 1 146 1 is_stmt 0
+ 451              	#NO_APP
+ 452 01d4 1B050500 		sext.w	a0,a0
+ 453 01d8 03348100 		ld	s0,8(sp)
+ 454              		.cfi_restore 8
+ 455              		.cfi_def_cfa 2, 16
+ 456 01dc 13010101 		addi	sp,sp,16
+ 457              		.cfi_def_cfa_offset 0
+ 458 01e0 67800000 		jr	ra
+ 459              		.cfi_endproc
+ 460              	.LFE49:
+ 462              		.align	2
+ 463              		.globl	_Z10time_sleepm
+ 465              	_Z10time_sleepm:
+ 466              	.LFB50:
+ 147:src/syscall_c.cpp **** 
+ 148:src/syscall_c.cpp **** int time_sleep (time_t time) {
+ 467              		.loc 1 148 30 is_stmt 1
+ 468              		.cfi_startproc
+ 469              	.LVL25:
+ 470 01e4 130101FF 		addi	sp,sp,-16
+ 471              		.cfi_def_cfa_offset 16
+ 472 01e8 23348100 		sd	s0,8(sp)
+ 473              		.cfi_offset 8, -8
+ 474 01ec 13040101 		addi	s0,sp,16
+ 475              		.cfi_def_cfa 8, 0
+ 149:src/syscall_c.cpp ****     return 0;
+ 476              		.loc 1 149 5
+ 150:src/syscall_c.cpp **** }
+ 477              		.loc 1 150 1 is_stmt 0
+ 478 01f0 13050000 		li	a0,0
+ 479              	.LVL26:
+ 480 01f4 03348100 		ld	s0,8(sp)
+ 481              		.cfi_restore 8
+ 482              		.cfi_def_cfa 2, 16
+ 483 01f8 13010101 		addi	sp,sp,16
+ 484              		.cfi_def_cfa_offset 0
+ 485 01fc 67800000 		jr	ra
+ 486              		.cfi_endproc
+ 487              	.LFE50:
+ 489              		.align	2
+ 490              		.globl	_Z4getcv
+ 492              	_Z4getcv:
+ 493              	.LFB51:
+ 151:src/syscall_c.cpp **** 
+ 152:src/syscall_c.cpp **** char getc () {
+ 494              		.loc 1 152 14 is_stmt 1
+ 495              		.cfi_startproc
+ 496 0200 130101FF 		addi	sp,sp,-16
+ 497              		.cfi_def_cfa_offset 16
+ 498 0204 23348100 		sd	s0,8(sp)
+ 499              		.cfi_offset 8, -8
+ 500 0208 13040101 		addi	s0,sp,16
+GAS LISTING /tmp/ccPGEp66.s 			page 12
+
+
+ 501              		.cfi_def_cfa 8, 0
+ 153:src/syscall_c.cpp ****     register uint64 x0 asm("a0") = 0x41;
+ 502              		.loc 1 153 5
+ 503              		.loc 1 153 21 is_stmt 0
+ 504 020c 13051004 		li	a0,65
+ 154:src/syscall_c.cpp **** 
+ 155:src/syscall_c.cpp ****     __asm__ volatile ("ecall"
+ 505              		.loc 1 155 5 is_stmt 1
+ 156:src/syscall_c.cpp ****         : "+r"(x0)
+ 157:src/syscall_c.cpp ****         :
+ 158:src/syscall_c.cpp ****         : "memory");
+ 506              		.loc 1 158 20 is_stmt 0
+ 507              	#APP
+ 508              	# 158 "src/syscall_c.cpp" 1
+ 159              	
+ 160:src/syscall_c.cpp ****     return (char)x0;
+ 509              		ecall
+ 510              	# 0 "" 2
+ 511              		.loc 1 160 5 is_stmt 1
+ 161:src/syscall_c.cpp **** }
+ 512              		.loc 1 161 1 is_stmt 0
+ 513              	#NO_APP
+ 514 0214 1375F50F 		andi	a0,a0,0xff
+ 515 0218 03348100 		ld	s0,8(sp)
+ 516              		.cfi_restore 8
+ 517              		.cfi_def_cfa 2, 16
+ 518 021c 13010101 		addi	sp,sp,16
+ 519              		.cfi_def_cfa_offset 0
+ 520 0220 67800000 		jr	ra
+ 521              		.cfi_endproc
+ 522              	.LFE51:
+ 524              		.align	2
+ 525              		.globl	_Z4putcc
+ 527              	_Z4putcc:
+ 528              	.LFB52:
+ 162:src/syscall_c.cpp **** 
+ 163:src/syscall_c.cpp **** void putc (char c) {
+ 529              		.loc 1 163 20 is_stmt 1
+ 530              		.cfi_startproc
+ 531              	.LVL27:
+ 532 0224 130101FF 		addi	sp,sp,-16
+ 533              		.cfi_def_cfa_offset 16
+ 534 0228 23348100 		sd	s0,8(sp)
+ 535              		.cfi_offset 8, -8
+ 536 022c 13040101 		addi	s0,sp,16
+ 537              		.cfi_def_cfa 8, 0
+ 538 0230 93050500 		mv	a1,a0
+ 164:src/syscall_c.cpp ****     register uint64 x0 asm("a0") = 0x42;
+ 539              		.loc 1 164 5
+ 540              		.loc 1 164 21 is_stmt 0
+ 541 0234 13052004 		li	a0,66
+ 542              	.LVL28:
+ 165:src/syscall_c.cpp ****     register uint64 x1 asm("a1") = (uint64)c;
+ 543              		.loc 1 165 5 is_stmt 1
+ 166:src/syscall_c.cpp **** 
+ 167:src/syscall_c.cpp ****     __asm__ volatile ("ecall"
+ 544              		.loc 1 167 5
+GAS LISTING /tmp/ccPGEp66.s 			page 13
+
+
+ 168:src/syscall_c.cpp ****         : "+r"(x0)
+ 169:src/syscall_c.cpp ****         : "r"(x1)
+ 170:src/syscall_c.cpp ****         : "memory");
+ 545              		.loc 1 170 20 is_stmt 0
+ 546              	#APP
+ 547              	# 170 "src/syscall_c.cpp" 1
+ 171              	}...
+ 548              		ecall
+ 549              	# 0 "" 2
+ 550              		.loc 1 171 1
+ 551              	#NO_APP
+ 552 023c 03348100 		ld	s0,8(sp)
+ 553              		.cfi_restore 8
+ 554              		.cfi_def_cfa 2, 16
+ 555 0240 13010101 		addi	sp,sp,16
+ 556              		.cfi_def_cfa_offset 0
+ 557 0244 67800000 		jr	ra
+ 558              		.cfi_endproc
+ 559              	.LFE52:
+ 561              	.Letext0:
+ 562              		.file 2 "src/../h/../lib//hw.h"
+ 563              		.file 3 "src/../h/../h/list.hpp"
+ 564              		.file 4 "src/../h/../h/tcb.hpp"
+ 565              		.file 5 "src/../h/../h/kernelSem.hpp"
+ 566              		.file 6 "src/../h/syscall_c.h"
+GAS LISTING /tmp/ccPGEp66.s 			page 14
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 syscall_c.cpp
+     /tmp/ccPGEp66.s:9      .text:0000000000000000 _Z9mem_allocm
+     /tmp/ccPGEp66.s:13     .text:0000000000000000 .L0 
+     /tmp/ccPGEp66.s:15     .text:0000000000000000 .L0 
+     /tmp/ccPGEp66.s:16     .text:0000000000000004 .L0 
+     /tmp/ccPGEp66.s:18     .text:0000000000000008 .L0 
+     /tmp/ccPGEp66.s:20     .text:000000000000000c .L0 
+     /tmp/ccPGEp66.s:22     .text:000000000000000c .L0 
+     /tmp/ccPGEp66.s:23     .text:000000000000000c .L0 
+     /tmp/ccPGEp66.s:26     .text:0000000000000010 .L0 
+     /tmp/ccPGEp66.s:27     .text:0000000000000010 .L0 
+     /tmp/ccPGEp66.s:30     .text:0000000000000014 .L0 
+     /tmp/ccPGEp66.s:31     .text:0000000000000014 .L0 
+     /tmp/ccPGEp66.s:34     .text:0000000000000018 .L0 
+   src/syscall_c.cpp:15     .text:0000000000000018 .L0 
+     /tmp/ccPGEp66.s:40     .text:000000000000001c .L0 
+     /tmp/ccPGEp66.s:42     .text:000000000000001c .L0 
+     /tmp/ccPGEp66.s:43     .text:0000000000000020 .L0 
+     /tmp/ccPGEp66.s:44     .text:0000000000000020 .L0 
+     /tmp/ccPGEp66.s:46     .text:0000000000000024 .L0 
+     /tmp/ccPGEp66.s:48     .text:0000000000000028 .L0 
+     /tmp/ccPGEp66.s:54     .text:0000000000000028 _Z8mem_freePv
+     /tmp/ccPGEp66.s:57     .text:0000000000000028 .L0 
+     /tmp/ccPGEp66.s:59     .text:0000000000000028 .L0 
+     /tmp/ccPGEp66.s:60     .text:000000000000002c .L0 
+     /tmp/ccPGEp66.s:62     .text:0000000000000030 .L0 
+     /tmp/ccPGEp66.s:64     .text:0000000000000034 .L0 
+     /tmp/ccPGEp66.s:67     .text:0000000000000038 .L0 
+     /tmp/ccPGEp66.s:68     .text:0000000000000038 .L0 
+     /tmp/ccPGEp66.s:71     .text:000000000000003c .L0 
+     /tmp/ccPGEp66.s:72     .text:000000000000003c .L0 
+   src/syscall_c.cpp:27     .text:000000000000003c .L0 
+     /tmp/ccPGEp66.s:78     .text:0000000000000040 .L0 
+     /tmp/ccPGEp66.s:80     .text:0000000000000040 .L0 
+     /tmp/ccPGEp66.s:82     .text:0000000000000048 .L0 
+     /tmp/ccPGEp66.s:83     .text:0000000000000048 .L0 
+     /tmp/ccPGEp66.s:85     .text:000000000000004c .L0 
+     /tmp/ccPGEp66.s:87     .text:0000000000000050 .L0 
+     /tmp/ccPGEp66.s:93     .text:0000000000000050 _Z13thread_createPP3TCBPFvPvES2_
+     /tmp/ccPGEp66.s:96     .text:0000000000000050 .L0 
+     /tmp/ccPGEp66.s:98     .text:0000000000000050 .L0 
+     /tmp/ccPGEp66.s:99     .text:0000000000000054 .L0 
+     /tmp/ccPGEp66.s:101    .text:0000000000000058 .L0 
+     /tmp/ccPGEp66.s:103    .text:000000000000005c .L0 
+     /tmp/ccPGEp66.s:108    .text:0000000000000068 .L0 
+     /tmp/ccPGEp66.s:109    .text:0000000000000068 .L0 
+     /tmp/ccPGEp66.s:112    .text:000000000000006c .L0 
+     /tmp/ccPGEp66.s:113    .text:000000000000006c .L0 
+     /tmp/ccPGEp66.s:116    .text:0000000000000070 .L0 
+     /tmp/ccPGEp66.s:117    .text:0000000000000070 .L0 
+     /tmp/ccPGEp66.s:120    .text:0000000000000074 .L0 
+     /tmp/ccPGEp66.s:121    .text:0000000000000074 .L0 
+   src/syscall_c.cpp:45     .text:0000000000000074 .L0 
+     /tmp/ccPGEp66.s:127    .text:0000000000000078 .L0 
+     /tmp/ccPGEp66.s:129    .text:0000000000000078 .L0 
+     /tmp/ccPGEp66.s:131    .text:0000000000000080 .L0 
+GAS LISTING /tmp/ccPGEp66.s 			page 15
+
+
+     /tmp/ccPGEp66.s:132    .text:0000000000000080 .L0 
+     /tmp/ccPGEp66.s:134    .text:0000000000000084 .L0 
+     /tmp/ccPGEp66.s:136    .text:0000000000000088 .L0 
+     /tmp/ccPGEp66.s:142    .text:0000000000000088 _Z11thread_exitv
+     /tmp/ccPGEp66.s:145    .text:0000000000000088 .L0 
+     /tmp/ccPGEp66.s:146    .text:0000000000000088 .L0 
+     /tmp/ccPGEp66.s:147    .text:000000000000008c .L0 
+     /tmp/ccPGEp66.s:149    .text:0000000000000090 .L0 
+     /tmp/ccPGEp66.s:151    .text:0000000000000094 .L0 
+     /tmp/ccPGEp66.s:153    .text:0000000000000094 .L0 
+     /tmp/ccPGEp66.s:154    .text:0000000000000094 .L0 
+     /tmp/ccPGEp66.s:156    .text:0000000000000098 .L0 
+   src/syscall_c.cpp:56     .text:0000000000000098 .L0 
+     /tmp/ccPGEp66.s:162    .text:000000000000009c .L0 
+     /tmp/ccPGEp66.s:164    .text:000000000000009c .L0 
+     /tmp/ccPGEp66.s:166    .text:00000000000000a4 .L0 
+     /tmp/ccPGEp66.s:167    .text:00000000000000a4 .L0 
+     /tmp/ccPGEp66.s:169    .text:00000000000000a8 .L0 
+     /tmp/ccPGEp66.s:171    .text:00000000000000ac .L0 
+     /tmp/ccPGEp66.s:177    .text:00000000000000ac _Z15thread_dispatchv
+     /tmp/ccPGEp66.s:180    .text:00000000000000ac .L0 
+     /tmp/ccPGEp66.s:181    .text:00000000000000ac .L0 
+     /tmp/ccPGEp66.s:182    .text:00000000000000b0 .L0 
+     /tmp/ccPGEp66.s:184    .text:00000000000000b4 .L0 
+     /tmp/ccPGEp66.s:186    .text:00000000000000b8 .L0 
+     /tmp/ccPGEp66.s:188    .text:00000000000000b8 .L0 
+     /tmp/ccPGEp66.s:189    .text:00000000000000b8 .L0 
+     /tmp/ccPGEp66.s:191    .text:00000000000000bc .L0 
+   src/syscall_c.cpp:67     .text:00000000000000bc .L0 
+     /tmp/ccPGEp66.s:198    .text:00000000000000c0 .L0 
+     /tmp/ccPGEp66.s:199    .text:00000000000000c4 .L0 
+     /tmp/ccPGEp66.s:200    .text:00000000000000c4 .L0 
+     /tmp/ccPGEp66.s:202    .text:00000000000000c8 .L0 
+     /tmp/ccPGEp66.s:204    .text:00000000000000cc .L0 
+     /tmp/ccPGEp66.s:210    .text:00000000000000cc _Z8sem_openPP9KernelSemm
+     /tmp/ccPGEp66.s:213    .text:00000000000000cc .L0 
+     /tmp/ccPGEp66.s:215    .text:00000000000000cc .L0 
+     /tmp/ccPGEp66.s:216    .text:00000000000000d0 .L0 
+     /tmp/ccPGEp66.s:218    .text:00000000000000d4 .L0 
+     /tmp/ccPGEp66.s:220    .text:00000000000000d8 .L0 
+     /tmp/ccPGEp66.s:224    .text:00000000000000e0 .L0 
+     /tmp/ccPGEp66.s:225    .text:00000000000000e0 .L0 
+     /tmp/ccPGEp66.s:228    .text:00000000000000e4 .L0 
+     /tmp/ccPGEp66.s:229    .text:00000000000000e4 .L0 
+     /tmp/ccPGEp66.s:232    .text:00000000000000e8 .L0 
+     /tmp/ccPGEp66.s:233    .text:00000000000000e8 .L0 
+   src/syscall_c.cpp:81     .text:00000000000000e8 .L0 
+     /tmp/ccPGEp66.s:239    .text:00000000000000ec .L0 
+     /tmp/ccPGEp66.s:241    .text:00000000000000ec .L0 
+     /tmp/ccPGEp66.s:243    .text:00000000000000f4 .L0 
+     /tmp/ccPGEp66.s:244    .text:00000000000000f4 .L0 
+     /tmp/ccPGEp66.s:246    .text:00000000000000f8 .L0 
+     /tmp/ccPGEp66.s:248    .text:00000000000000fc .L0 
+     /tmp/ccPGEp66.s:254    .text:00000000000000fc _Z9sem_closeP9KernelSem
+     /tmp/ccPGEp66.s:257    .text:00000000000000fc .L0 
+     /tmp/ccPGEp66.s:259    .text:00000000000000fc .L0 
+     /tmp/ccPGEp66.s:260    .text:0000000000000100 .L0 
+GAS LISTING /tmp/ccPGEp66.s 			page 16
+
+
+     /tmp/ccPGEp66.s:262    .text:0000000000000104 .L0 
+     /tmp/ccPGEp66.s:264    .text:0000000000000108 .L0 
+     /tmp/ccPGEp66.s:267    .text:000000000000010c .L0 
+     /tmp/ccPGEp66.s:268    .text:000000000000010c .L0 
+     /tmp/ccPGEp66.s:271    .text:0000000000000110 .L0 
+     /tmp/ccPGEp66.s:272    .text:0000000000000110 .L0 
+   src/syscall_c.cpp:93     .text:0000000000000110 .L0 
+     /tmp/ccPGEp66.s:278    .text:0000000000000114 .L0 
+     /tmp/ccPGEp66.s:280    .text:0000000000000114 .L0 
+     /tmp/ccPGEp66.s:282    .text:000000000000011c .L0 
+     /tmp/ccPGEp66.s:283    .text:000000000000011c .L0 
+     /tmp/ccPGEp66.s:285    .text:0000000000000120 .L0 
+     /tmp/ccPGEp66.s:287    .text:0000000000000124 .L0 
+     /tmp/ccPGEp66.s:293    .text:0000000000000124 _Z8sem_waitP9KernelSem
+     /tmp/ccPGEp66.s:296    .text:0000000000000124 .L0 
+     /tmp/ccPGEp66.s:298    .text:0000000000000124 .L0 
+     /tmp/ccPGEp66.s:299    .text:0000000000000128 .L0 
+     /tmp/ccPGEp66.s:301    .text:000000000000012c .L0 
+     /tmp/ccPGEp66.s:303    .text:0000000000000130 .L0 
+     /tmp/ccPGEp66.s:306    .text:0000000000000134 .L0 
+     /tmp/ccPGEp66.s:307    .text:0000000000000134 .L0 
+     /tmp/ccPGEp66.s:310    .text:0000000000000138 .L0 
+     /tmp/ccPGEp66.s:311    .text:0000000000000138 .L0 
+   src/syscall_c.cpp:105    .text:0000000000000138 .L0 
+     /tmp/ccPGEp66.s:317    .text:000000000000013c .L0 
+     /tmp/ccPGEp66.s:319    .text:000000000000013c .L0 
+     /tmp/ccPGEp66.s:321    .text:0000000000000144 .L0 
+     /tmp/ccPGEp66.s:322    .text:0000000000000144 .L0 
+     /tmp/ccPGEp66.s:324    .text:0000000000000148 .L0 
+     /tmp/ccPGEp66.s:326    .text:000000000000014c .L0 
+     /tmp/ccPGEp66.s:332    .text:000000000000014c _Z10sem_signalP9KernelSem
+     /tmp/ccPGEp66.s:335    .text:000000000000014c .L0 
+     /tmp/ccPGEp66.s:337    .text:000000000000014c .L0 
+     /tmp/ccPGEp66.s:338    .text:0000000000000150 .L0 
+     /tmp/ccPGEp66.s:340    .text:0000000000000154 .L0 
+     /tmp/ccPGEp66.s:342    .text:0000000000000158 .L0 
+     /tmp/ccPGEp66.s:345    .text:000000000000015c .L0 
+     /tmp/ccPGEp66.s:346    .text:000000000000015c .L0 
+     /tmp/ccPGEp66.s:349    .text:0000000000000160 .L0 
+     /tmp/ccPGEp66.s:350    .text:0000000000000160 .L0 
+   src/syscall_c.cpp:117    .text:0000000000000160 .L0 
+     /tmp/ccPGEp66.s:356    .text:0000000000000164 .L0 
+     /tmp/ccPGEp66.s:358    .text:0000000000000164 .L0 
+     /tmp/ccPGEp66.s:360    .text:000000000000016c .L0 
+     /tmp/ccPGEp66.s:361    .text:000000000000016c .L0 
+     /tmp/ccPGEp66.s:363    .text:0000000000000170 .L0 
+     /tmp/ccPGEp66.s:365    .text:0000000000000174 .L0 
+     /tmp/ccPGEp66.s:371    .text:0000000000000174 _Z10sem_wait_nP9KernelSemj
+     /tmp/ccPGEp66.s:374    .text:0000000000000174 .L0 
+     /tmp/ccPGEp66.s:376    .text:0000000000000174 .L0 
+     /tmp/ccPGEp66.s:377    .text:0000000000000178 .L0 
+     /tmp/ccPGEp66.s:379    .text:000000000000017c .L0 
+     /tmp/ccPGEp66.s:381    .text:0000000000000180 .L0 
+     /tmp/ccPGEp66.s:385    .text:0000000000000188 .L0 
+     /tmp/ccPGEp66.s:386    .text:0000000000000188 .L0 
+     /tmp/ccPGEp66.s:389    .text:000000000000018c .L0 
+     /tmp/ccPGEp66.s:390    .text:000000000000018c .L0 
+GAS LISTING /tmp/ccPGEp66.s 			page 17
+
+
+     /tmp/ccPGEp66.s:393    .text:0000000000000190 .L0 
+     /tmp/ccPGEp66.s:394    .text:0000000000000190 .L0 
+     /tmp/ccPGEp66.s:397    .text:0000000000000198 .L0 
+   src/syscall_c.cpp:130    .text:0000000000000198 .L0 
+     /tmp/ccPGEp66.s:403    .text:000000000000019c .L0 
+     /tmp/ccPGEp66.s:405    .text:000000000000019c .L0 
+     /tmp/ccPGEp66.s:407    .text:00000000000001a4 .L0 
+     /tmp/ccPGEp66.s:408    .text:00000000000001a4 .L0 
+     /tmp/ccPGEp66.s:410    .text:00000000000001a8 .L0 
+     /tmp/ccPGEp66.s:412    .text:00000000000001ac .L0 
+     /tmp/ccPGEp66.s:418    .text:00000000000001ac _Z12sem_signal_nP9KernelSemj
+     /tmp/ccPGEp66.s:421    .text:00000000000001ac .L0 
+     /tmp/ccPGEp66.s:423    .text:00000000000001ac .L0 
+     /tmp/ccPGEp66.s:424    .text:00000000000001b0 .L0 
+     /tmp/ccPGEp66.s:426    .text:00000000000001b4 .L0 
+     /tmp/ccPGEp66.s:428    .text:00000000000001b8 .L0 
+     /tmp/ccPGEp66.s:432    .text:00000000000001c0 .L0 
+     /tmp/ccPGEp66.s:433    .text:00000000000001c0 .L0 
+     /tmp/ccPGEp66.s:436    .text:00000000000001c4 .L0 
+     /tmp/ccPGEp66.s:437    .text:00000000000001c4 .L0 
+     /tmp/ccPGEp66.s:440    .text:00000000000001c8 .L0 
+     /tmp/ccPGEp66.s:441    .text:00000000000001c8 .L0 
+     /tmp/ccPGEp66.s:444    .text:00000000000001d0 .L0 
+   src/syscall_c.cpp:143    .text:00000000000001d0 .L0 
+     /tmp/ccPGEp66.s:450    .text:00000000000001d4 .L0 
+     /tmp/ccPGEp66.s:452    .text:00000000000001d4 .L0 
+     /tmp/ccPGEp66.s:454    .text:00000000000001dc .L0 
+     /tmp/ccPGEp66.s:455    .text:00000000000001dc .L0 
+     /tmp/ccPGEp66.s:457    .text:00000000000001e0 .L0 
+     /tmp/ccPGEp66.s:459    .text:00000000000001e4 .L0 
+     /tmp/ccPGEp66.s:465    .text:00000000000001e4 _Z10time_sleepm
+     /tmp/ccPGEp66.s:468    .text:00000000000001e4 .L0 
+     /tmp/ccPGEp66.s:470    .text:00000000000001e4 .L0 
+     /tmp/ccPGEp66.s:471    .text:00000000000001e8 .L0 
+     /tmp/ccPGEp66.s:473    .text:00000000000001ec .L0 
+     /tmp/ccPGEp66.s:475    .text:00000000000001f0 .L0 
+     /tmp/ccPGEp66.s:477    .text:00000000000001f0 .L0 
+     /tmp/ccPGEp66.s:478    .text:00000000000001f0 .L0 
+     /tmp/ccPGEp66.s:481    .text:00000000000001f8 .L0 
+     /tmp/ccPGEp66.s:482    .text:00000000000001f8 .L0 
+     /tmp/ccPGEp66.s:484    .text:00000000000001fc .L0 
+     /tmp/ccPGEp66.s:486    .text:0000000000000200 .L0 
+     /tmp/ccPGEp66.s:492    .text:0000000000000200 _Z4getcv
+     /tmp/ccPGEp66.s:495    .text:0000000000000200 .L0 
+     /tmp/ccPGEp66.s:496    .text:0000000000000200 .L0 
+     /tmp/ccPGEp66.s:497    .text:0000000000000204 .L0 
+     /tmp/ccPGEp66.s:499    .text:0000000000000208 .L0 
+     /tmp/ccPGEp66.s:501    .text:000000000000020c .L0 
+     /tmp/ccPGEp66.s:503    .text:000000000000020c .L0 
+     /tmp/ccPGEp66.s:504    .text:000000000000020c .L0 
+     /tmp/ccPGEp66.s:506    .text:0000000000000210 .L0 
+   src/syscall_c.cpp:158    .text:0000000000000210 .L0 
+     /tmp/ccPGEp66.s:512    .text:0000000000000214 .L0 
+     /tmp/ccPGEp66.s:514    .text:0000000000000214 .L0 
+     /tmp/ccPGEp66.s:516    .text:000000000000021c .L0 
+     /tmp/ccPGEp66.s:517    .text:000000000000021c .L0 
+     /tmp/ccPGEp66.s:519    .text:0000000000000220 .L0 
+GAS LISTING /tmp/ccPGEp66.s 			page 18
+
+
+     /tmp/ccPGEp66.s:521    .text:0000000000000224 .L0 
+     /tmp/ccPGEp66.s:527    .text:0000000000000224 _Z4putcc
+     /tmp/ccPGEp66.s:530    .text:0000000000000224 .L0 
+     /tmp/ccPGEp66.s:532    .text:0000000000000224 .L0 
+     /tmp/ccPGEp66.s:533    .text:0000000000000228 .L0 
+     /tmp/ccPGEp66.s:535    .text:000000000000022c .L0 
+     /tmp/ccPGEp66.s:537    .text:0000000000000230 .L0 
+     /tmp/ccPGEp66.s:540    .text:0000000000000234 .L0 
+     /tmp/ccPGEp66.s:541    .text:0000000000000234 .L0 
+     /tmp/ccPGEp66.s:544    .text:0000000000000238 .L0 
+     /tmp/ccPGEp66.s:545    .text:0000000000000238 .L0 
+   src/syscall_c.cpp:170    .text:0000000000000238 .L0 
+     /tmp/ccPGEp66.s:552    .text:000000000000023c .L0 
+     /tmp/ccPGEp66.s:553    .text:0000000000000240 .L0 
+     /tmp/ccPGEp66.s:554    .text:0000000000000240 .L0 
+     /tmp/ccPGEp66.s:556    .text:0000000000000244 .L0 
+     /tmp/ccPGEp66.s:558    .text:0000000000000248 .L0 
+     /tmp/ccPGEp66.s:567    .text:0000000000000248 .L0 
+     /tmp/ccPGEp66.s:1778   .debug_abbrev:0000000000000000 .Ldebug_abbrev0
+     /tmp/ccPGEp66.s:2935   .debug_str:00000000000005d9 .LASF111
+     /tmp/ccPGEp66.s:2839   .debug_str:0000000000000357 .LASF112
+     /tmp/ccPGEp66.s:2749   .debug_str:000000000000008e .LASF113
+     /tmp/ccPGEp66.s:5      .text:0000000000000000 .Ltext0
+     /tmp/ccPGEp66.s:561    .text:0000000000000248 .Letext0
+     /tmp/ccPGEp66.s:2729   .debug_line:0000000000000000 .Ldebug_line0
+     /tmp/ccPGEp66.s:2803   .debug_str:000000000000024f .LASF0
+     /tmp/ccPGEp66.s:2825   .debug_str:0000000000000307 .LASF1
+     /tmp/ccPGEp66.s:2891   .debug_str:00000000000004dc .LASF2
+     /tmp/ccPGEp66.s:2897   .debug_str:00000000000004ff .LASF4
+     /tmp/ccPGEp66.s:2809   .debug_str:0000000000000272 .LASF3
+     /tmp/ccPGEp66.s:2739   .debug_str:0000000000000053 .LASF5
+     /tmp/ccPGEp66.s:2869   .debug_str:0000000000000434 .LASF6
+     /tmp/ccPGEp66.s:2859   .debug_str:00000000000003e5 .LASF7
+     /tmp/ccPGEp66.s:2817   .debug_str:00000000000002cc .LASF8
+     /tmp/ccPGEp66.s:2791   .debug_str:0000000000000209 .LASF9
+     /tmp/ccPGEp66.s:2793   .debug_str:0000000000000219 .LASF10
+     /tmp/ccPGEp66.s:2755   .debug_str:00000000000000d9 .LASF11
+     /tmp/ccPGEp66.s:2787   .debug_str:00000000000001ef .LASF12
+     /tmp/ccPGEp66.s:2761   .debug_str:0000000000000111 .LASF13
+     /tmp/ccPGEp66.s:2753   .debug_str:00000000000000c9 .LASF14
+     /tmp/ccPGEp66.s:2915   .debug_str:0000000000000568 .LASF15
+     /tmp/ccPGEp66.s:2781   .debug_str:00000000000001a6 .LASF16
+     /tmp/ccPGEp66.s:2907   .debug_str:000000000000052c .LASF17
+     /tmp/ccPGEp66.s:2955   .debug_str:000000000000071e .LASF37
+     /tmp/ccPGEp66.s:2945   .debug_str:00000000000006e2 .LASF114
+     /tmp/ccPGEp66.s:2911   .debug_str:0000000000000555 .LASF18
+     /tmp/ccPGEp66.s:2847   .debug_str:000000000000038d .LASF19
+     /tmp/ccPGEp66.s:2845   .debug_str:0000000000000388 .LASF20
+     /tmp/ccPGEp66.s:2909   .debug_str:0000000000000542 .LASF25
+     /tmp/ccPGEp66.s:2785   .debug_str:00000000000001d8 .LASF22
+     /tmp/ccPGEp66.s:2893   .debug_str:00000000000004ea .LASF78
+     /tmp/ccPGEp66.s:2885   .debug_str:0000000000000495 .LASF80
+     /tmp/ccPGEp66.s:2777   .debug_str:0000000000000185 .LASF21
+     /tmp/ccPGEp66.s:2779   .debug_str:000000000000018d .LASF23
+     /tmp/ccPGEp66.s:2819   .debug_str:00000000000002df .LASF24
+     /tmp/ccPGEp66.s:2751   .debug_str:00000000000000ac .LASF26
+     /tmp/ccPGEp66.s:2829   .debug_str:0000000000000333 .LASF27
+GAS LISTING /tmp/ccPGEp66.s 			page 19
+
+
+     /tmp/ccPGEp66.s:2783   .debug_str:00000000000001bc .LASF28
+     /tmp/ccPGEp66.s:2857   .debug_str:00000000000003d9 .LASF29
+     /tmp/ccPGEp66.s:2957   .debug_str:0000000000000728 .LASF30
+     /tmp/ccPGEp66.s:2975   .debug_str:00000000000007b4 .LASF31
+     /tmp/ccPGEp66.s:2969   .debug_str:0000000000000776 .LASF32
+     /tmp/ccPGEp66.s:2901   .debug_str:000000000000050b .LASF33
+     /tmp/ccPGEp66.s:2815   .debug_str:00000000000002af .LASF34
+     /tmp/ccPGEp66.s:2877   .debug_str:000000000000045b .LASF35
+     /tmp/ccPGEp66.s:2733   .debug_str:0000000000000005 .LASF36
+     /tmp/ccPGEp66.s:2925   .debug_str:00000000000005ae .LASF115
+     /tmp/ccPGEp66.s:2899   .debug_str:0000000000000506 .LASF38
+     /tmp/ccPGEp66.s:2737   .debug_str:0000000000000047 .LASF39
+     /tmp/ccPGEp66.s:2937   .debug_str:000000000000069d .LASF116
+     /tmp/ccPGEp66.s:2855   .debug_str:00000000000003d4 .LASF117
+     /tmp/ccPGEp66.s:2933   .debug_str:00000000000005d1 .LASF118
+     /tmp/ccPGEp66.s:2747   .debug_str:0000000000000082 .LASF40
+     /tmp/ccPGEp66.s:2941   .debug_str:00000000000006b9 .LASF41
+     /tmp/ccPGEp66.s:2927   .debug_str:00000000000005b6 .LASF42
+     /tmp/ccPGEp66.s:2921   .debug_str:0000000000000591 .LASF43
+     /tmp/ccPGEp66.s:2961   .debug_str:0000000000000751 .LASF44
+     /tmp/ccPGEp66.s:2919   .debug_str:000000000000057d .LASF45
+     /tmp/ccPGEp66.s:2929   .debug_str:00000000000005c1 .LASF46
+     /tmp/ccPGEp66.s:2759   .debug_str:00000000000000fb .LASF47
+     /tmp/ccPGEp66.s:2949   .debug_str:00000000000006fe .LASF48
+     /tmp/ccPGEp66.s:2743   .debug_str:0000000000000064 .LASF49
+     /tmp/ccPGEp66.s:2811   .debug_str:0000000000000284 .LASF50
+     /tmp/ccPGEp66.s:2851   .debug_str:000000000000039a .LASF51
+     /tmp/ccPGEp66.s:2773   .debug_str:0000000000000177 .LASF52
+     /tmp/ccPGEp66.s:2757   .debug_str:00000000000000e8 .LASF54
+     /tmp/ccPGEp66.s:2865   .debug_str:0000000000000416 .LASF53
+     /tmp/ccPGEp66.s:2827   .debug_str:000000000000031a .LASF55
+     /tmp/ccPGEp66.s:2731   .debug_str:0000000000000000 .LASF56
+     /tmp/ccPGEp66.s:2833   .debug_str:0000000000000340 .LASF57
+     /tmp/ccPGEp66.s:2939   .debug_str:00000000000006b1 .LASF58
+     /tmp/ccPGEp66.s:2905   .debug_str:0000000000000523 .LASF59
+     /tmp/ccPGEp66.s:2871   .debug_str:000000000000043b .LASF60
+     /tmp/ccPGEp66.s:2959   .debug_str:0000000000000746 .LASF61
+     /tmp/ccPGEp66.s:2895   .debug_str:00000000000004f4 .LASF119
+     /tmp/ccPGEp66.s:2765   .debug_str:000000000000012c .LASF120
+     /tmp/ccPGEp66.s:2735   .debug_str:000000000000001f .LASF121
+     /tmp/ccPGEp66.s:2831   .debug_str:000000000000033b .LASF62
+     /tmp/ccPGEp66.s:2741   .debug_str:000000000000005a .LASF63
+     /tmp/ccPGEp66.s:2883   .debug_str:000000000000048c .LASF64
+     /tmp/ccPGEp66.s:2889   .debug_str:00000000000004c3 .LASF65
+     /tmp/ccPGEp66.s:2875   .debug_str:0000000000000451 .LASF66
+     /tmp/ccPGEp66.s:2821   .debug_str:00000000000002e8 .LASF67
+     /tmp/ccPGEp66.s:2775   .debug_str:0000000000000180 .LASF68
+     /tmp/ccPGEp66.s:2771   .debug_str:0000000000000162 .LASF69
+     /tmp/ccPGEp66.s:2923   .debug_str:00000000000005a7 .LASF70
+     /tmp/ccPGEp66.s:2887   .debug_str:00000000000004ac .LASF71
+     /tmp/ccPGEp66.s:2943   .debug_str:00000000000006d0 .LASF122
+     /tmp/ccPGEp66.s:2799   .debug_str:0000000000000240 .LASF72
+     /tmp/ccPGEp66.s:2953   .debug_str:0000000000000715 .LASF73
+     /tmp/ccPGEp66.s:2965   .debug_str:0000000000000762 .LASF74
+     /tmp/ccPGEp66.s:2837   .debug_str:0000000000000352 .LASF75
+     /tmp/ccPGEp66.s:2917   .debug_str:0000000000000574 .LASF76
+     /tmp/ccPGEp66.s:528    .text:0000000000000224 .LFB52
+GAS LISTING /tmp/ccPGEp66.s 			page 20
+
+
+     /tmp/ccPGEp66.s:559    .text:0000000000000248 .LFE52
+     /tmp/ccPGEp66.s:2504   .debug_loc:0000000000000000 .LLST16
+     /tmp/ccPGEp66.s:2931   .debug_str:00000000000005cc .LASF77
+     /tmp/ccPGEp66.s:2805   .debug_str:000000000000025c .LASF79
+     /tmp/ccPGEp66.s:2951   .debug_str:000000000000070c .LASF81
+     /tmp/ccPGEp66.s:493    .text:0000000000000200 .LFB51
+     /tmp/ccPGEp66.s:522    .text:0000000000000224 .LFE51
+     /tmp/ccPGEp66.s:2763   .debug_str:0000000000000121 .LASF82
+     /tmp/ccPGEp66.s:2867   .debug_str:0000000000000424 .LASF83
+     /tmp/ccPGEp66.s:466    .text:00000000000001e4 .LFB50
+     /tmp/ccPGEp66.s:487    .text:0000000000000200 .LFE50
+     /tmp/ccPGEp66.s:2863   .debug_str:0000000000000411 .LASF84
+     /tmp/ccPGEp66.s:2518   .debug_loc:0000000000000039 .LLST15
+     /tmp/ccPGEp66.s:2903   .debug_str:0000000000000516 .LASF85
+     /tmp/ccPGEp66.s:2813   .debug_str:0000000000000292 .LASF86
+     /tmp/ccPGEp66.s:419    .text:00000000000001ac .LFB49
+     /tmp/ccPGEp66.s:460    .text:00000000000001e4 .LFE49
+     /tmp/ccPGEp66.s:2532   .debug_loc:0000000000000072 .LLST13
+     /tmp/ccPGEp66.s:2543   .debug_loc:00000000000000a8 .LLST14
+     /tmp/ccPGEp66.s:2789   .debug_str:00000000000001fe .LASF87
+     /tmp/ccPGEp66.s:2769   .debug_str:0000000000000147 .LASF88
+     /tmp/ccPGEp66.s:372    .text:0000000000000174 .LFB48
+     /tmp/ccPGEp66.s:413    .text:00000000000001ac .LFE48
+     /tmp/ccPGEp66.s:2557   .debug_loc:00000000000000e1 .LLST11
+     /tmp/ccPGEp66.s:2568   .debug_loc:0000000000000117 .LLST12
+     /tmp/ccPGEp66.s:2797   .debug_str:0000000000000235 .LASF89
+     /tmp/ccPGEp66.s:2971   .debug_str:0000000000000791 .LASF90
+     /tmp/ccPGEp66.s:333    .text:000000000000014c .LFB47
+     /tmp/ccPGEp66.s:366    .text:0000000000000174 .LFE47
+     /tmp/ccPGEp66.s:2582   .debug_loc:0000000000000150 .LLST10
+     /tmp/ccPGEp66.s:2973   .debug_str:00000000000007ab .LASF91
+     /tmp/ccPGEp66.s:2947   .debug_str:00000000000006e7 .LASF92
+     /tmp/ccPGEp66.s:294    .text:0000000000000124 .LFB46
+     /tmp/ccPGEp66.s:327    .text:000000000000014c .LFE46
+     /tmp/ccPGEp66.s:2593   .debug_loc:0000000000000186 .LLST9
+     /tmp/ccPGEp66.s:2881   .debug_str:0000000000000474 .LASF93
+     /tmp/ccPGEp66.s:255    .text:00000000000000fc .LFB45
+     /tmp/ccPGEp66.s:288    .text:0000000000000124 .LFE45
+     /tmp/ccPGEp66.s:2963   .debug_str:000000000000075b .LASF94
+     /tmp/ccPGEp66.s:2604   .debug_loc:00000000000001bc .LLST8
+     /tmp/ccPGEp66.s:2861   .debug_str:00000000000003f8 .LASF95
+     /tmp/ccPGEp66.s:211    .text:00000000000000cc .LFB44
+     /tmp/ccPGEp66.s:249    .text:00000000000000fc .LFE44
+     /tmp/ccPGEp66.s:2615   .debug_loc:00000000000001f2 .LLST6
+     /tmp/ccPGEp66.s:2745   .debug_str:000000000000007d .LASF96
+     /tmp/ccPGEp66.s:2626   .debug_loc:0000000000000228 .LLST7
+     /tmp/ccPGEp66.s:2879   .debug_str:0000000000000464 .LASF97
+     /tmp/ccPGEp66.s:2843   .debug_str:0000000000000373 .LASF98
+     /tmp/ccPGEp66.s:178    .text:00000000000000ac .LFB43
+     /tmp/ccPGEp66.s:205    .text:00000000000000cc .LFE43
+     /tmp/ccPGEp66.s:2835   .debug_str:0000000000000346 .LASF99
+     /tmp/ccPGEp66.s:2807   .debug_str:0000000000000261 .LASF100
+     /tmp/ccPGEp66.s:143    .text:0000000000000088 .LFB42
+     /tmp/ccPGEp66.s:172    .text:00000000000000ac .LFE42
+     /tmp/ccPGEp66.s:2913   .debug_str:000000000000055a .LASF101
+     /tmp/ccPGEp66.s:2853   .debug_str:00000000000003b3 .LASF102
+     /tmp/ccPGEp66.s:94     .text:0000000000000050 .LFB41
+GAS LISTING /tmp/ccPGEp66.s 			page 21
+
+
+     /tmp/ccPGEp66.s:137    .text:0000000000000088 .LFE41
+     /tmp/ccPGEp66.s:2637   .debug_loc:000000000000025e .LLST3
+     /tmp/ccPGEp66.s:2873   .debug_str:0000000000000443 .LASF103
+     /tmp/ccPGEp66.s:2648   .debug_loc:0000000000000294 .LLST4
+     /tmp/ccPGEp66.s:2659   .debug_loc:00000000000002ca .LLST5
+     /tmp/ccPGEp66.s:2801   .debug_str:0000000000000246 .LASF104
+     /tmp/ccPGEp66.s:2967   .debug_str:0000000000000768 .LASF105
+     /tmp/ccPGEp66.s:55     .text:0000000000000028 .LFB40
+     /tmp/ccPGEp66.s:88     .text:0000000000000050 .LFE40
+     /tmp/ccPGEp66.s:2849   .debug_str:0000000000000392 .LASF106
+     /tmp/ccPGEp66.s:2670   .debug_loc:0000000000000300 .LLST2
+     /tmp/ccPGEp66.s:2841   .debug_str:0000000000000369 .LASF107
+     /tmp/ccPGEp66.s:2795   .debug_str:0000000000000227 .LASF108
+     /tmp/ccPGEp66.s:10     .text:0000000000000000 .LFB39
+     /tmp/ccPGEp66.s:49     .text:0000000000000028 .LFE39
+     /tmp/ccPGEp66.s:2823   .debug_str:0000000000000302 .LASF109
+     /tmp/ccPGEp66.s:2681   .debug_loc:0000000000000336 .LLST0
+     /tmp/ccPGEp66.s:2767   .debug_str:000000000000013a .LASF110
+     /tmp/ccPGEp66.s:2701   .debug_loc:0000000000000384 .LLST1
+     /tmp/ccPGEp66.s:531    .text:0000000000000224 .LVL27
+     /tmp/ccPGEp66.s:542    .text:0000000000000238 .LVL28
+     /tmp/ccPGEp66.s:469    .text:00000000000001e4 .LVL25
+     /tmp/ccPGEp66.s:479    .text:00000000000001f4 .LVL26
+     /tmp/ccPGEp66.s:422    .text:00000000000001ac .LVL22
+     /tmp/ccPGEp66.s:434    .text:00000000000001c4 .LVL23
+     /tmp/ccPGEp66.s:438    .text:00000000000001c8 .LVL24
+     /tmp/ccPGEp66.s:375    .text:0000000000000174 .LVL19
+     /tmp/ccPGEp66.s:387    .text:000000000000018c .LVL20
+     /tmp/ccPGEp66.s:391    .text:0000000000000190 .LVL21
+     /tmp/ccPGEp66.s:336    .text:000000000000014c .LVL17
+     /tmp/ccPGEp66.s:347    .text:0000000000000160 .LVL18
+     /tmp/ccPGEp66.s:297    .text:0000000000000124 .LVL15
+     /tmp/ccPGEp66.s:308    .text:0000000000000138 .LVL16
+     /tmp/ccPGEp66.s:258    .text:00000000000000fc .LVL13
+     /tmp/ccPGEp66.s:269    .text:0000000000000110 .LVL14
+     /tmp/ccPGEp66.s:214    .text:00000000000000cc .LVL10
+     /tmp/ccPGEp66.s:226    .text:00000000000000e4 .LVL11
+     /tmp/ccPGEp66.s:230    .text:00000000000000e8 .LVL12
+     /tmp/ccPGEp66.s:97     .text:0000000000000050 .LVL6
+     /tmp/ccPGEp66.s:110    .text:000000000000006c .LVL7
+     /tmp/ccPGEp66.s:114    .text:0000000000000070 .LVL8
+     /tmp/ccPGEp66.s:118    .text:0000000000000074 .LVL9
+     /tmp/ccPGEp66.s:58     .text:0000000000000028 .LVL4
+     /tmp/ccPGEp66.s:69     .text:000000000000003c .LVL5
+     /tmp/ccPGEp66.s:14     .text:0000000000000000 .LVL0
+     /tmp/ccPGEp66.s:28     .text:0000000000000014 .LVL2
+     /tmp/ccPGEp66.s:32     .text:0000000000000018 .LVL3
+     /tmp/ccPGEp66.s:24     .text:0000000000000010 .LVL1
+     /tmp/ccPGEp66.s:568    .debug_info:0000000000000000 .Ldebug_info0
+
+NO UNDEFINED SYMBOLS
